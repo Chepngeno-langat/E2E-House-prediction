@@ -28,7 +28,7 @@ jobs:
           pip install flake8
           flake8 .
 
-      - name: Test with pytest
+      - name: Testing with pytest
         run: |
           pip install pytest
           pytest
