@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Prediction</title>
+</head>
+<body>
+    <h1>House Price Prediction</h1>
+    <form id="prediction-form">
+        <label for="area">Area:</label><br>
+        <input type="text" id="area" name="area"><br>
+        <label for="bedrooms">Bedrooms:</label><br>
+        <input type="text" id="bedrooms" name="bedrooms"><br>
+        <label for="bathrooms">Bathrooms:</label><br>
+        <input type="text" id="bathrooms" name="bathrooms"><br>
+        <label for="stories">Stories:</label><br>
+        <input type="text" id="stories" name="stories"><br>
+        <label for="parking">Parking:</label><br>
+        <input type="text" id="parking" name="parking"><br>
+        <label for="mainroad">Main Road:</label><br>
+        <input type="text" id="mainroad" name="mainroad"><br>
+        <label for="guestroom">Guest Room:</label><br>
+        <input type="text" id="guestroom" name="guestroom"><br>
+        <label for="basement">Basement:</label><br>
+        <input type="text" id="basement" name="basement"><br>
+        <label for="hotwaterheating">Hot Water Heating:</label><br>
+        <input type="text" id="hotwaterheating" name="hotwaterheating"><br>
+        <label for="airconditioning">Air Conditioning:</label><br>
+        <input type="text" id="airconditioning" name="airconditioning"><br>
+        <label for="prefarea">Prefarea:</label><br>
+        <input type="text" id="prefarea" name="prefarea"><br>
+        <label for="furnishingstatus">Furnishing Status:</label><br>
+        <input type="text" id="furnishingstatus" name="furnishingstatus"><br>
+        <input type="submit" value="Predict">
+    </form>
+
+    <p id="prediction-result"></p>
+
+    <script>
+        document.getElementById("prediction-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            let jsonData = Object.fromEntries(formData.entries());
+
+            // Convert numerical fields to numbers
+            jsonData.area = Number(jsonData.area);
+            jsonData.bedrooms = Number(jsonData.bedrooms);
+            jsonData.bathrooms = Number(jsonData.bathrooms);
+            jsonData.stories = Number(jsonData.stories);
+            jsonData.parking = Number(jsonData.parking);
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ features: jsonData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("prediction-result").innerText = "Predicted Price: " + data.prediction;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
